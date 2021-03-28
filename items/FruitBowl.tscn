@@ -1,0 +1,65 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://items/fruitbowl_depth.png" type="Texture" id=1]
+[ext_resource path="res://items/fruitbowl.png" type="Texture" id=2]
+[ext_resource path="res://items/fruitbowl_normal.png" type="Texture" id=3]
+
+[sub_resource type="QuadMesh" id=1]
+
+[sub_resource type="SpatialMaterial" id=2]
+flags_transparent = true
+params_billboard_mode = 2
+albedo_texture = ExtResource( 2 )
+normal_enabled = true
+normal_scale = 1.0
+normal_texture = ExtResource( 3 )
+depth_enabled = true
+depth_scale = -0.2
+depth_deep_parallax = true
+depth_min_layers = 8
+depth_max_layers = 32
+depth_flip_tangent = false
+depth_flip_binormal = false
+depth_texture = ExtResource( 1 )
+
+[sub_resource type="CylinderShape" id=3]
+radius = 0.5
+height = 0.9
+
+[sub_resource type="SpatialMaterial" id=4]
+albedo_color = Color( 0.792157, 0, 0, 1 )
+
+[sub_resource type="CubeMesh" id=5]
+size = Vector3( 1, 0.1, 1 )
+
+[node name="FruitBowl" type="Spatial"]
+
+[node name="RigidBody" type="RigidBody" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0594364, 0 )
+axis_lock_angular_x = true
+axis_lock_angular_z = true
+
+[node name="MeshInstance" type="MeshInstance" parent="RigidBody"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.505204, 0 )
+mesh = SubResource( 1 )
+material/0 = SubResource( 2 )
+
+[node name="CollisionShape" type="CollisionShape" parent="RigidBody"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.392154, 0 )
+shape = SubResource( 3 )
+
+[node name="CSGSphere" type="CSGSphere" parent="RigidBody"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.353155, 0 )
+radius = 0.5
+material = SubResource( 4 )
+
+[node name="CSGSphere" type="CSGSphere" parent="RigidBody/CSGSphere"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.146025, 0 )
+operation = 2
+radius = 0.55
+material = SubResource( 4 )
+
+[node name="CSGMesh" type="CSGMesh" parent="RigidBody/CSGSphere"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.467191, 0 )
+operation = 2
+mesh = SubResource( 5 )

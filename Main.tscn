@@ -1,0 +1,82 @@
+[gd_scene load_steps=17 format=2]
+
+[ext_resource path="res://addons/zylann.hterrain/hterrain_texture_set.gd" type="Script" id=1]
+[ext_resource path="res://addons/zylann.hterrain/hterrain.gd" type="Script" id=2]
+[ext_resource path="res://hedgedata/data.hterrain" type="Resource" id=3]
+[ext_resource path="res://player/player.tscn" type="PackedScene" id=4]
+[ext_resource path="res://Main_slot0_albedo_bump.packed_tex" type="Texture" id=5]
+[ext_resource path="res://Main_slot1_normal_roughness.packed_tex" type="Texture" id=6]
+[ext_resource path="res://Main_slot1_albedo_bump.packed_tex" type="Texture" id=7]
+[ext_resource path="res://Main_slot0_normal_roughness.packed_tex" type="Texture" id=8]
+[ext_resource path="res://mazes/hedge_albedo.png" type="Texture" id=9]
+[ext_resource path="res://items/FruitBowl.tscn" type="PackedScene" id=10]
+
+[sub_resource type="Resource" id=1]
+script = ExtResource( 1 )
+mode = 0
+textures = [ [ ExtResource( 5 ), ExtResource( 7 ) ], [ ExtResource( 8 ), ExtResource( 6 ) ] ]
+
+[sub_resource type="SpatialMaterial" id=2]
+flags_world_triplanar = true
+albedo_texture = ExtResource( 9 )
+uv1_triplanar = true
+
+[sub_resource type="CubeMesh" id=3]
+material = SubResource( 2 )
+size = Vector3( 4, 0.5, 3.3 )
+
+[sub_resource type="ConcavePolygonShape" id=4]
+data = PoolVector3Array( -2, 0.25, 1.65, 2, 0.25, 1.65, -2, -0.25, 1.65, 2, 0.25, 1.65, 2, -0.25, 1.65, -2, -0.25, 1.65, 2, 0.25, -1.65, -2, 0.25, -1.65, 2, -0.25, -1.65, -2, 0.25, -1.65, -2, -0.25, -1.65, 2, -0.25, -1.65, 2, 0.25, 1.65, 2, 0.25, -1.65, 2, -0.25, 1.65, 2, 0.25, -1.65, 2, -0.25, -1.65, 2, -0.25, 1.65, -2, 0.25, -1.65, -2, 0.25, 1.65, -2, -0.25, -1.65, -2, 0.25, 1.65, -2, -0.25, 1.65, -2, -0.25, -1.65, 2, 0.25, 1.65, -2, 0.25, 1.65, 2, 0.25, -1.65, -2, 0.25, 1.65, -2, 0.25, -1.65, 2, 0.25, -1.65, -2, -0.25, 1.65, 2, -0.25, 1.65, -2, -0.25, -1.65, 2, -0.25, 1.65, 2, -0.25, -1.65, -2, -0.25, -1.65 )
+
+[sub_resource type="ProceduralSky" id=5]
+
+[sub_resource type="Environment" id=6]
+background_mode = 2
+background_sky = SubResource( 5 )
+background_energy = 2.0
+
+[node name="Spatial" type="Spatial"]
+
+[node name="Spatial" type="Spatial" parent="."]
+
+[node name="HTerrain" type="Spatial" parent="Spatial"]
+transform = Transform( 0.965926, -1.13133e-08, -0.258819, 1.13133e-08, 1, -1.48943e-09, 0.258819, -1.48943e-09, 0.965926, 0, 0, 0 )
+script = ExtResource( 2 )
+ambient_wind = 0.0
+lod_scale = 2.0
+map_scale = Vector3( 0.08, 0.08, 0.08 )
+_terrain_data = ExtResource( 3 )
+chunk_size = 32
+collision_enabled = true
+collision_layer = 1
+collision_mask = 1
+shader_type = "Classic4Lite"
+custom_shader = null
+custom_globalmap_shader = null
+texture_set = SubResource( 1 )
+shader_params/u_ground_uv_scale = 20
+shader_params/u_depth_blending = true
+shader_params/u_triplanar = false
+shader_params/u_tile_reduction = Plane( 0, 0, 0, 0 )
+
+[node name="player" parent="." instance=ExtResource( 4 )]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 39.1205, 0, 17.6728 )
+
+[node name="Bridge" type="Spatial" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 41.9863, 5, 30.3427 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Bridge"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.141445, -0.354049, 0.0947247 )
+mesh = SubResource( 3 )
+material/0 = null
+
+[node name="StaticBody" type="StaticBody" parent="Bridge/MeshInstance"]
+
+[node name="CollisionShape" type="CollisionShape" parent="Bridge/MeshInstance/StaticBody"]
+shape = SubResource( 4 )
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource( 6 )
+
+[node name="FruitBowl" parent="." instance=ExtResource( 10 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 41.9863, 5.99187, 18.6887 )
